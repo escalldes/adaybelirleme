@@ -1,0 +1,43 @@
+module.exports = (sequelize, DataTypes) => {
+    const AkademikIlan = sequelize.define('akademik_ilanlar', {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      baslik: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      aciklama: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
+      kategori: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      baslangic_tarihi: {
+        type: DataTypes.DATEONLY,
+        allowNull: true,
+      },
+      bitis_tarihi: {
+        type: DataTypes.DATEONLY,
+        allowNull: true,
+      },
+      olusturan_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      olusturulma_tarihi: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+      }
+    }, {
+      tableName: 'akademik_ilanlar',
+      timestamps: false
+    });
+  
+    return AkademikIlan;
+  };
+  
