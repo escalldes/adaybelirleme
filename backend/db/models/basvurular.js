@@ -1,3 +1,4 @@
+// db/models/basvurular.js
 module.exports = (sequelize, DataTypes) => {
     const Basvuru = sequelize.define('basvurular', {
       id: {
@@ -8,10 +9,18 @@ module.exports = (sequelize, DataTypes) => {
       kullanici_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+          model: 'users',
+          key: 'id'
+        }
       },
       ilan_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+          model: 'ilanlar',
+          key: 'id'
+        }
       },
       durum: {
         type: DataTypes.STRING,
