@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.TEXT,
         allowNull: true,
       },
+      
       yuklenme_tarihi: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,

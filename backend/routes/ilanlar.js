@@ -20,6 +20,7 @@ router.post('/', authenticateToken, isAdmin, async (req, res) => {
       baslik,
       aciklama,
       kategori,
+      gerekli_belgeler,
       baslangic_tarihi,
       bitis_tarihi,
       olusturan_id: req.user.id,
@@ -36,7 +37,7 @@ router.post('/', authenticateToken, isAdmin, async (req, res) => {
 router.put('/:id', authenticateToken, isAdmin, async (req, res) => {
   try {
     const { id } = req.params;
-    const { baslik, aciklama, kategori, baslangic_tarihi, bitis_tarihi } = req.body;
+    const { baslik, aciklama, kategori, gerekli_belgeler, baslangic_tarihi, bitis_tarihi } = req.body;
     const ilan = await Ilan.findByPk(id);
     if (!ilan) {
       return res.status(404).json({ error: 'İlan bulunamadı' });
@@ -45,6 +46,7 @@ router.put('/:id', authenticateToken, isAdmin, async (req, res) => {
     ilan.baslik = baslik !== undefined ? baslik : ilan.baslik;
     ilan.aciklama = aciklama !== undefined ? aciklama : ilan.aciklama;
     ilan.kategori = kategori !== undefined ? kategori : ilan.kategori;
+    ilan.gerekli_belgeler = gerekli_belgeler !== undefined ? gerekli_belgeler : ilan.gerekli_belgeler
     ilan.baslangic_tarihi = baslangic_tarihi !== undefined ? baslangic_tarihi : ilan.baslangic_tarihi;
     ilan.bitis_tarihi = bitis_tarihi !== undefined ? bitis_tarihi : ilan.bitis_tarihi;
 
