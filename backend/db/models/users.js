@@ -4,12 +4,12 @@ module.exports = (sequelize, DataTypes) => {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      autoIncrement: true,  // pgAdmin4'te otomatik artan olacak
+      autoIncrement: true,
     },
     tc: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,  // TC kimlik numarası benzersiz olmalı
+      unique: true,
     },
     ad: {
       type: DataTypes.STRING,
@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
     dogumYili: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      field: 'dogumyili'  // Veritabanındaki sütun adı küçük harflerle
+      field: 'dogumyili'
     },
     email: {
       type: DataTypes.STRING,
@@ -36,11 +36,29 @@ module.exports = (sequelize, DataTypes) => {
     rol: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: 'aday',  // Varsayılan rol aday (candidate)
+      defaultValue: 'aday',
     }
   }, {
-    tableName: 'users',   // Veritabanındaki tablo adı
-    timestamps: false     // createdAt/updatedAt kullanmıyorsanız
+    tableName: 'users',
+    timestamps: false,
+    hooks: {
+      beforeCreate: (user, options) => {
+        if (user.ad) {
+          user.ad = user.ad.charAt(0).toLocaleUpperCase('tr-TR') + user.ad.slice(1).toLocaleLowerCase('tr-TR');
+        }
+        if (user.soyad) {
+          user.soyad = user.soyad.toLocaleUpperCase('tr-TR');
+        }
+      },
+      beforeUpdate: (user, options) => {
+        if (user.ad) {
+          user.ad = user.ad.charAt(0).toLocaleUpperCase('tr-TR') + user.ad.slice(1).toLocaleLowerCase('tr-TR');
+        }
+        if (user.soyad) {
+          user.soyad = user.soyad.toLocaleUpperCase('tr-TR');
+        }
+      }
+    }
   });
 
   return User;

@@ -12,23 +12,32 @@
 }
 
 
-.lastAddHome1 {
+.lastAddHome {
+  width: 100%;
+  background: #fff;
   display: flex;
-  flex-direction: row;
-
-
-}
-
-.lastAddHome2 {
-  display: flex;
-  flex-direction: row;
-
+  flex-direction: column;
   align-items: center;
+  padding: 2rem 0;
 }
 
 .lastAddPHome {
-  margin-left: -412px;
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+}
 
+.lastAddHomeGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  width: 100%;
+  max-width: 1200px;
+}
+.lastAddHomeGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 2rem;
 }
 
 
@@ -54,7 +63,7 @@
   
 }
 
-.lastAddHome {
+/*.lastAddHome {
   width: 100%;
   height: 340px;
   background-color: rgb(255, 255, 255);
@@ -67,7 +76,7 @@
   padding-bottom: 100px;
   padding-top: 20px;
 
-}
+}*/
 
 .containerBoxHome {
   height: 140px;

@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const authenticateToken = require('../middlewares/authenticateToken');
-const { User } = require('../db'); // User modelini doğru şekilde alıyoruz
+const { users:User } = require('../db'); // User modelini doğru şekilde alıyoruz
 
 router.get('/profile', authenticateToken, async (req, res) => {
   const userId = req.user.id; // req.user, middleware'den eklenen doğru özellik

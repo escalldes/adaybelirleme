@@ -3,7 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const soap = require('soap');
-const { User } = require('../db');
+const { users: User } = require('../db');
 
 const saltRounds = 10;
 const jwtSecret = 'your_jwt_secret_here'; // Prod’da .env’den oku

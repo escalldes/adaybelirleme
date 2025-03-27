@@ -4,19 +4,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 
 function ApplicantFirstLogin() {
-  const [formData, setFormData] = useState({
-    tc: '',
-    sifre: ''
-  });
+  const [formData, setFormData] = useState({ tc: '', sifre: '' });
   const [message, setMessage] = useState('');
-  const [authToken, setAuthToken] = useState(''); // Token'ı burada tutuyoruz.
+  const [authToken, setAuthToken] = useState('');
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
@@ -25,27 +19,37 @@ function ApplicantFirstLogin() {
       // Backend API endpoint'ine POST isteği gönderiyoruz.
       const response = await axios.post('http://localhost:5000/api/auth/login', formData);
       const token = response.data.token;
-      
-      // Token'ı hem localStorage'a hem de state'e kaydediyoruz.
+
+      if (!token) {
+        setMessage('Token alınamadı, lütfen tekrar deneyin.');
+        return;
+      }
+
+      // Token'ı localStorage'a ve state'e kaydediyoruz.
       localStorage.setItem('token', token);
       setAuthToken(token);
-      
+      setMessage(response.data.message);
+
+      console.log("Token = ", token);
+
+      // Token decode edip rol kontrolü yapalım
       try {
-        if (token) {
-          const decoded = jwtDecode(token);
-          const { id, tc, rol, iat, exp } = decoded;
-          console.log("id:", id, "tc:", tc, "rol:", rol);
+        const decoded = jwtDecode(token);
+        const { rol } = decoded;
+        console.log("decoded rol:", rol);
+
+        // Eğer rol 'aday' ise home'a yönlendir
+        if (rol === 'aday') {
+          navigate('/Applicant_home');
         } else {
-          console.log("Token alınamadı.");
+          // Aday değilse sadece uyarı ver, token'ı SİLME.
+          setMessage("Sadece 'aday' rolündeki kullanıcılar bu ekrandan giriş yapabilir!");
         }
       } catch (err) {
         console.error("Token decode edilirken hata oluştu:", err);
+        setMessage("Token decode edilemedi.");
       }
-      
-      console.log("Token = ", token);
-      setMessage(response.data.message);
-      // Örneğin profil sayfasına yönlendirme
-      navigate('/');
+
     } catch (error) {
       setMessage(error.response?.data?.error || 'Bir hata oluştu');
     }
@@ -78,7 +82,7 @@ function ApplicantFirstLogin() {
           />
           <Link to="/applicant_login" className="link-style">Kayıt Ol</Link>
           <button type="submit">Giriş Yap</button>
-          {/* Eğer Deneme sayfasına token göndermek istiyorsanız */}
+          {/* Örnek Deneme Linki, opsiyonel */}
           <Link to="/Deneme" className="link-style" state={{ token: authToken }}>
             Deneme
           </Link>
