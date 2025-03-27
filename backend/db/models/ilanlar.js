@@ -18,6 +18,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
+    gerekli_belgeler: {
+      // Adaylardan hangi belgeleri zorunlu tutmak istiyorsanız, admin bunları çoklu-checkbox ile belirler.
+      // JSON dizisi tutabilirsiniz. Örnek: ["CV", "Doktora Diploması", "Atıf Listesi"]
+      type: DataTypes.JSON,
+      allowNull: true,
+    },
     baslangic_tarihi: {
       type: DataTypes.DATEONLY,
       allowNull: true,

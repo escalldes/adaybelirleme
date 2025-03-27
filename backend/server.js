@@ -22,6 +22,9 @@ app.use('/api/users', userRoutes);
 const adminIlanlarRoutes = require('./routes/ilanlar');
 app.use('/api/admin/ilanlar', adminIlanlarRoutes);
 
+const belgeRoutes = require('./routes/belgeler');
+app.use('/api/belgeler', belgeRoutes);
+
 const publicIlanlarRoutes = require('./routes/publicIlanlar');
 app.use('/api/ilanlar', publicIlanlarRoutes);
 
