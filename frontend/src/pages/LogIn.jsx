@@ -21,7 +21,7 @@ function LogIn() {
           <Link className="button-link" to="/">Yönetici Girişi</Link>
           <Link className="button-link" to="/applicant_first_login">Aday Girişi</Link>
           <Link className="button-link" to="/Jury_Menu">Jüri Girişi</Link>
-          <Link className="button-link" to="/">Admin Girişi</Link>
+          <Link className="button-link" to="/Admin_login">Admin Girişi</Link>
         </div>
 
         <h3>Eğitim Yönetim Bilgi Sistemleri</h3>

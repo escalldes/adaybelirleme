@@ -3,7 +3,10 @@ const { Sequelize, DataTypes } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
 
+
 const sequelize = new Sequelize('KouDb', 'postgres', '123456', {
+
+
   host: 'localhost',
   dialect: 'postgres',
   port: 5432,
@@ -108,4 +111,6 @@ sequelize.sync()
   .then(() => console.log('Veritabanı ve tablolar senkronize edildi!'))
   .catch(err => console.error('Senkronizasyon hatası:', err));
 
+
 module.exports = db;
+

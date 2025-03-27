@@ -19,6 +19,9 @@ app.use('/api/auth', authRoutes);
 const userRoutes = require('./routes/user');
 app.use('/api/users', userRoutes);
 
+const adminIlanlarRoutes = require('./routes/ilanlar');
+app.use('/api/admin/ilanlar', adminIlanlarRoutes);
+
 
 const authenticateToken = require('./middlewares/authenticateToken');
 app.get('/api/protected-route', authenticateToken, (req, res) => {

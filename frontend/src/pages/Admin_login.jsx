@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import './css/applicant_first_login.css';
 
-function ApplicantFirstLogin() {
+function AdminLogin() {
   const [formData, setFormData] = useState({
     tc: '',
     sifre: ''
@@ -46,7 +46,7 @@ function ApplicantFirstLogin() {
       console.log("Token = ", token);
       setMessage(response.data.message);
       // Örneğin profil sayfasına yönlendirme
-      navigate('/Applicant_home');
+      navigate('/Admin_home');
     } catch (error) {
       setMessage(error.response?.data?.error || 'Bir hata oluştu');
     }
@@ -78,12 +78,16 @@ function ApplicantFirstLogin() {
             placeholder="Şifre"
           />
           <Link to="/applicant_login" className="link-style">Kayıt Ol</Link>
-          <Link to="/Applicant_home" className="link-style" type="submit">Giriş Yap Deneme</Link>
+
+          <Link to="/Admin_home" className="link-style">Admin Home Geçici Link</Link>
+
           <button type="submit">Giriş Yap</button>
-          {/* Eğer Deneme sayfasına token göndermek istiyorsanız */}
-          <Link to="/Deneme" className="link-style" state={{ token: authToken }}>
-            Deneme
-          </Link>
+
+
+
+
+         
+         
         </form>
         {message && <p>{message}</p>}
       </div>
@@ -91,4 +95,4 @@ function ApplicantFirstLogin() {
   );
 }
 
-export default ApplicantFirstLogin;
+export default AdminLogin;
