@@ -6,8 +6,9 @@ import axios from 'axios';
 
 function Admin_home() {
   const [profile, setProfile] = useState(null);
+  const [ilanlar, setIlanlar] = useState([]);
 
-  // API'den kullanıcı verilerini çekmek için useEffect kullanımı
+  // Kullanıcı profil verilerini API'den çekme
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -17,8 +18,6 @@ function Admin_home() {
         },
       })
       .then((response) => {
-        // Örneğin, response.data şu şekilde ol abilir:
-        // { ad: "Ahmet", soyad: "Yılmaz", tc: "12345678901", email: "ahmet@example.com", rol: "Akademik Personel", dogumYili: "1970" }
         setProfile(response.data);
       })
       .catch((error) => {
@@ -27,23 +26,33 @@ function Admin_home() {
     }
   }, []);
 
-  // Diğer pagination kodlarınız burada mevcut...
-  const CurrentActiveListings = [
-    ["İlan 1", "İlan 2", "İlan 3", "İlan 4"],
-    ["İlan 5", "İlan 6", "İlan 7", "İlan 8"]
-  ];
-  const [currentPage1, setCurrentPage1] = useState(1);
-  const totalPages1 = CurrentActiveListings.length;
-  const currentItems1 = CurrentActiveListings[currentPage1 - 1];
+  // İlan verilerini API'den çekme
+  useEffect(() => {
+    axios.get('http://localhost:5000/api/ilanlar')
+      .then((res) => {
+         // API'nin response yapısına göre: { ilanlar: [...] }
+         setIlanlar(res.data.ilanlar);
+      })
+      .catch(err => console.error('İlanlar çekilemedi:', err));
+  }, []);
 
-  const nextPage1 = () => {
-    if (currentPage1 < totalPages1) setCurrentPage1(currentPage1 + 1);
+  // Pagination ayarları: Her sayfada 4 ilan
+  const [currentPage, setCurrentPage] = useState(1);
+  const ilanPerPage = 4;
+  const totalPages = Math.ceil(ilanlar.length / ilanPerPage);
+  const currentItems = ilanlar.slice((currentPage - 1) * ilanPerPage, currentPage * ilanPerPage);
+
+  const nextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(prev => prev + 1);
+    }
   };
 
-  const prevPage1 = () => {
-    if (currentPage1 > 1) setCurrentPage1(currentPage1 - 1);
+  const prevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(prev => prev - 1);
+    }
   };
-
 
   return (
     <div>
@@ -59,14 +68,13 @@ function Admin_home() {
                 <p>Sayın {profile?.ad} {profile?.soyad}</p>
               </span>
               <p>Kocaeli Üniversitesi İlan</p>
-              <p> Yönetim Paneline</p>
+              <p>Yönetim Paneline</p>
               <p>Hoşgeldiniz</p>
               <br />
-              <button type="submit">Hesabım</button>
+              <button type="submit">Yeni İlan Ekle</button>
             </div>
           </div>
         </div>
-     
       </div>
 
       <div className="jury-container3">
@@ -77,18 +85,18 @@ function Admin_home() {
           </div>
           <h2>Güncel Aktif İlanlar</h2>
           <div className="jury-items">
-            {currentItems1.map((role, index) => (
-              <div key={index} className="jury-item">
-                <p className="jury-date">27.11.2025</p>
-                <p className="jury-role">TekFak {role} Alımı</p>
+            {currentItems.map(ilan => (
+              <div key={ilan.id} className="jury-item">
+                <p className="jury-date">{ilan.baslangic_tarihi}</p>
+                <p className="jury-role">{ilan.baslik}</p>
                 <button className="evaluate-button">İlan İçeriği</button>
               </div>
             ))}
           </div>
           <div className="pagination">
-            <button onClick={prevPage1} disabled={currentPage1 === 1}>Önceki</button>
-            <span>Sayfa {currentPage1} / {totalPages1}</span>
-            <button onClick={nextPage1} disabled={currentPage1 === totalPages1}>Sonraki</button>
+            <button onClick={prevPage} disabled={currentPage === 1}>Önceki</button>
+            <span>Sayfa {currentPage} / {totalPages}</span>
+            <button onClick={nextPage} disabled={currentPage === totalPages}>Sonraki</button>
           </div>
         </div>
         <div className="jury-container3-right">
@@ -96,12 +104,9 @@ function Admin_home() {
         </div>
       </div>
 
-
-   
-
       <Footer />
     </div>
   );
 }
 
-export default Admin_home
+export default Admin_home;

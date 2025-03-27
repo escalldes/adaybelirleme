@@ -10,8 +10,10 @@ import ApplicantFirstLogin from './pages/ApplicantFirstLogin';
 import JuryMenu from './pages/Jury_Menu';
 import Deneme from './pages/Deneme';
 import Applicant_home from './pages/Applicant_home';
+
 import Admin_login from './pages/Admin_login';
 import Admin_home from './pages/Admin_home';
+
 
 function App() {
   const [count, setCount] = useState(0);
@@ -33,9 +35,13 @@ function App() {
         <Route path='/applicant_first_login' element={<ApplicantFirstLogin />} />
         <Route path='/Jury_Menu' element={<JuryMenu />} />
         <Route path='/Deneme' element={<Deneme />} />
+
         <Route path='/Applicant_home' element={<Applicant_home />} />
         <Route path='/Admin_login' element={<Admin_login />} />
         <Route path='/Admin_home' element={<Admin_home />} />
+
+        <Route path='/Applicant_home' element={<Applicant_home />} />
+
       </Routes>
     </div>
   );

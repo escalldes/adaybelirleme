@@ -1,15 +1,12 @@
-// ContainerHome.jsx
 import React from 'react';
+import './ContainerHome.css';
 
-function ContainerHome() {
+export default function ContainerHome({ title, date, description }) {
   return (
     <div className="container-home">
-      <div className='containerBoxHome' >
-      <p>Duyurular</p>
-      </div>
-      
+      <p className="date">{date}</p>
+      <h3 className="title">{title}</h3>
+      <p className="description">{description}</p>
     </div>
   );
 }
-
-export default ContainerHome;

@@ -6,56 +6,72 @@ import axios from 'axios';
 
 function Applicant_home() {
   const [profile, setProfile] = useState(null);
+  
+  // İlanlar
+  const [announcements, setAnnouncements] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  // API'den kullanıcı verilerini çekmek için useEffect kullanımı
+  // Başvurular
+  const [applications, setApplications] = useState([]);
+  const [currentPage2, setCurrentPage2] = useState(1);
+
+  // Profil Bilgisi
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
       axios.get('http://localhost:5000/api/users/profile', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` }
       })
-      .then((response) => {
-        // Örneğin, response.data şu şekilde olabilir:
-        // { ad: "Ahmet", soyad: "Yılmaz", tc: "12345678901", email: "ahmet@example.com", rol: "Akademik Personel", dogumYili: "1970" }
-        setProfile(response.data);
-      })
-      .catch((error) => {
-        console.error("Profil verisi çekilemedi:", error);
-      });
+      .then((response) => setProfile(response.data))
+      .catch((error) => console.error("Profil verisi çekilemedi:", error));
     }
   }, []);
 
-  // Diğer pagination kodlarınız burada mevcut...
-  const LatestAnnouncements = [
-    ["Duyuru 1", "Duyuru 2", "Duyuru 3", "Duyuru 4"],
-    ["Duyuru 5", "Duyuru 6", "Duyuru 7", "Duyuru 8"]
-  ];
-  const [currentPage1, setCurrentPage1] = useState(1);
-  const totalPages1 = LatestAnnouncements.length;
-  const currentItems1 = LatestAnnouncements[currentPage1 - 1];
+  // İlanları Çekme (Aynı Mantık)
+  useEffect(() => {
+    axios.get('http://localhost:5000/api/ilanlar')
+      .then((response) => {
+        setAnnouncements(response.data.ilanlar); // { ilanlar: [...] }
+      })
+      .catch((error) => {
+        console.error("İlan verisi çekilemedi:", error);
+      });
+  }, []);
 
-  const nextPage1 = () => {
-    if (currentPage1 < totalPages1) setCurrentPage1(currentPage1 + 1);
+  // Başvuruları Çekme (Yeni)
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      axios.get('http://localhost:5000/api/basvurular', {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      .then((res) => setApplications(res.data))
+      .catch((err) => console.error("Başvuru verisi çekilemedi:", err));
+    }
+  }, []);
+
+  // İlanlar için pagination ayarları
+  const itemsPerPage = 4; 
+  const totalPages = Math.ceil(announcements.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentAnnouncements = announcements.slice(startIndex, startIndex + itemsPerPage);
+
+  const nextPage = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  };
+  const prevPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
 
-  const prevPage1 = () => {
-    if (currentPage1 > 1) setCurrentPage1(currentPage1 - 1);
-  };
-
-  const applicationHistory = [
-    ["Geçmiş Başvuru 1", "Geçmiş 2", "Geçmiş 3", "Geçmiş 4"],
-    ["Geçmiş 5", "Geçmiş 6", "Geçmiş 7", "Geçmiş 8"]
-  ];
-  const [currentPage2, setCurrentPage2] = useState(1);
-  const totalPages2 = applicationHistory.length;
-  const currentItems2 = applicationHistory[currentPage2 - 1];
+  // Başvurular için pagination ayarları (Aynı Mantık)
+  const itemsPerPage2 = 4; 
+  const totalPages2 = Math.ceil(applications.length / itemsPerPage2);
+  const startIndex2 = (currentPage2 - 1) * itemsPerPage2;
+  const currentApps = applications.slice(startIndex2, startIndex2 + itemsPerPage2);
 
   const nextPage2 = () => {
     if (currentPage2 < totalPages2) setCurrentPage2(currentPage2 + 1);
   };
-
   const prevPage2 = () => {
     if (currentPage2 > 1) setCurrentPage2(currentPage2 - 1);
   };
@@ -82,6 +98,8 @@ function Applicant_home() {
             </div>
           </div>
         </div>
+
+        {/* Duyurular / Resim Kartı */}
         <div className="jury-container2">
           <div className="announcement-card">
             <div className="announcement-image">
@@ -94,26 +112,27 @@ function Applicant_home() {
         </div>
       </div>
 
+      {/* En Son Yüklenen İlanlar */}
       <div className="jury-container3">
         <div className="jury-container3-left">
           <div className="title-line">
             <h4>Güncel Bilgilere Hızlı Erişin</h4>
             <span className="line"></span>
           </div>
-          <h2>En Son Yüklenen Duyurular</h2>
+          <h2>En Son Yüklenen İlanlar</h2>
           <div className="jury-items">
-            {currentItems1.map((role, index) => (
-              <div key={index} className="jury-item">
-                <p className="jury-date">27.11.2025</p>
-                <p className="jury-role">TekFak {role} Alımı</p>
-                <button className="evaluate-button">Değerlendir</button>
+            {currentAnnouncements.map((ilan) => (
+              <div key={ilan.id} className="jury-item">
+                <p className="jury-date">{ilan.baslangic_tarihi}</p>
+                <p className="jury-role">{ilan.baslik}</p>
+                <button className="evaluate-button">Detay</button>
               </div>
             ))}
           </div>
           <div className="pagination">
-            <button onClick={prevPage1} disabled={currentPage1 === 1}>Önceki</button>
-            <span>Sayfa {currentPage1} / {totalPages1}</span>
-            <button onClick={nextPage1} disabled={currentPage1 === totalPages1}>Sonraki</button>
+            <button onClick={prevPage} disabled={currentPage === 1}>Önceki</button>
+            <span>Sayfa {currentPage} / {totalPages}</span>
+            <button onClick={nextPage} disabled={currentPage === totalPages}>Sonraki</button>
           </div>
         </div>
         <div className="jury-container3-right">
@@ -121,6 +140,7 @@ function Applicant_home() {
         </div>
       </div>
 
+      {/* Başvuru Geçmişi */}
       <div className="jury-container3">
         <div className="jury-container3-left">
           <div className="title-line">
@@ -129,13 +149,21 @@ function Applicant_home() {
           </div>
           <h2>Başvuru Geçmişi</h2>
           <div className="jury-items">
-            {currentItems2.map((role, index) => (
-              <div key={index} className="jury-item">
-                <p className="jury-date">27.11.2025</p>
-                <p className="jury-role">TekFak {role}</p>
-                <button className="evaluate-button">Değerlendir</button>
-              </div>
-            ))}
+            {currentApps.map((app, index) => {
+              // İlan adını göstermek istersen, announcements’dan bulabilirsin
+              const ilanBul = announcements.find(ilan => ilan.id === app.ilan_id);
+              return (
+                <div key={app.id} className="jury-item">
+                  <p className="jury-date">
+                    {app.basvuru_tarihi?.split('T')[0]}
+                  </p>
+                  <p className="jury-role">
+                    {ilanBul ? ilanBul.baslik : `İlan #${app.ilan_id}`}
+                  </p>
+                  <button className="evaluate-button">{app.durum}</button>
+                </div>
+              );
+            })}
           </div>
           <div className="pagination">
             <button onClick={prevPage2} disabled={currentPage2 === 1}>Önceki</button>

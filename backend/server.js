@@ -22,6 +22,14 @@ app.use('/api/users', userRoutes);
 const adminIlanlarRoutes = require('./routes/ilanlar');
 app.use('/api/admin/ilanlar', adminIlanlarRoutes);
 
+const publicIlanlarRoutes = require('./routes/publicIlanlar');
+app.use('/api/ilanlar', publicIlanlarRoutes);
+
+const basvuruRoutes = require('./routes/basvurular');
+app.use('/api/basvurular', basvuruRoutes);
+
+
+
 
 const authenticateToken = require('./middlewares/authenticateToken');
 app.get('/api/protected-route', authenticateToken, (req, res) => {
